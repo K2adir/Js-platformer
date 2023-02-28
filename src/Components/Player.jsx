@@ -1,13 +1,24 @@
+import { useEffect } from "react";
 import React from "react";
 
-const Player = ({ c }) => {
-  c.fillStyle = "red";
-  c.fillRect(100, 100, 100, 100);
+const Player = ({ c, canvas }) => {
+  useEffect(() => {
+    let y = 50;
+    let x = 100;
+    const animate = () => {
+      window.requestAnimationFrame(animate);
+      c.clearRect(0, 0, canvas.width, canvas.height);
+      c.fillStyle = "red";
+      c.fillRect(x, y, 50, 10);
+      y++;
+    };
 
-  const animate = () => {
-    window.requestAnimationFrame(animate);
-    console.log("animate");
-  };
+    c.fillStyle = "white";
+    c.fillRect(0, 0, canvas.width, canvas.height);
+
+    animate();
+  }, [c, canvas]);
+
   return (
     <>
       <h1>Player</h1>
