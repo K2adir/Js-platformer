@@ -1,44 +1,59 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import Controls from "./Controls";
 
-const Player = ({ c, canvas }) => {
-  class Player {
-    constructor() {
-      this.position = {
-        x: 50,
-        y: 50,
-      };
+class Player {
+  constructor() {
+    this.position = {
+      x: 50,
+      y: 50,
+    };
+    this.velocity = {
+      x: 0,
+      y: 0,
+    };
+    this.gravity = 1;
 
-      this.velocity = {
-        x: 0,
-        y: 0,
-      };
-      this.gravity = 1;
-
-      this.width = 25;
-      this.height = 25;
-      this.sides = {
-        bottom: this.position.y + this.height,
-      };
-    }
-
-    draw() {
-      c.fillStyle = "red";
-      c.fillRect(this.position.x, this.position.y, this.width, this.height);
-    }
-
-    update() {
-      this.position.x += this.velocity.x;
-      this.position.y += this.velocity.y;
-      this.sides.bottom = this.position.y + this.height;
-
-      // canvas ground
-      if (this.sides.bottom + this.velocity.y < canvas.height) {
-        this.velocity.y += this.gravity;
-      } else this.velocity.y = 0;
-    }
+    this.width = 25;
+    this.height = 25;
+    this.sides = {
+      bottom: this.position.y + this.height,
+    };
   }
 
-  const player = new Player();
+  draw(c) {
+    c.fillStyle = "red";
+    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+  }
+
+  update(canvas) {
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+    this.sides.bottom = this.position.y + this.height;
+
+    // canvas ground
+    if (this.sides.bottom + this.velocity.y < canvas.height) {
+      this.velocity.y += this.gravity;
+    } else {
+      this.velocity.y = 0;
+    }
+  }
+}
+
+const PlayerComponent = ({ c, canvas }) => {
+  const playerRef = useRef(new Player());
+
+  // Pressed Keys
+  const keys = {
+    w: {
+      pressed: false,
+    },
+    a: {
+      pressed: false,
+    },
+    d: {
+      pressed: false,
+    },
+  };
 
   useEffect(() => {
     const animate = () => {
@@ -48,65 +63,28 @@ const Player = ({ c, canvas }) => {
       c.fillStyle = "white";
       c.fillRect(0, 0, canvas.width, canvas.height);
 
-      player.draw();
-      player.update();
+      // player movement speed = 4
+      playerRef.current.velocity.x = 0;
+
+      if (keys.d.pressed) {
+        playerRef.current.velocity.x = 4;
+      } else if (keys.a.pressed) {
+        playerRef.current.velocity.x = -4;
+      }
+
+      playerRef.current.draw(c);
+      playerRef.current.update(canvas);
     };
 
     animate();
-  }, [c, canvas]);
-
-  // KEY DOWN
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      switch (e.key) {
-        case "w":
-          // this sets how height the player can jump
-          if (player.velocity.y === 0) player.velocity.y = -15;
-          break;
-        case "a":
-          //move left
-          player.velocity.x = -4;
-          break;
-
-        case "d":
-          //move right
-          player.velocity.x = 4;
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  useEffect(() => {
-    const handleKeyUp = (e) => {
-      switch (e.key) {
-        case "a":
-          //move left
-          player.velocity.x = 0;
-          break;
-
-        case "d":
-          //move right
-          player.velocity.x = 0;
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener("keyup", handleKeyUp);
-    return () => window.removeEventListener("keyup", handleKeyUp);
-  }, []);
+  }, [c, canvas, keys]);
 
   return (
     <>
       <h1>Player</h1>
+      <Controls keys={keys} player={playerRef.current} />
     </>
   );
 };
 
-export default Player;
+export default PlayerComponent;

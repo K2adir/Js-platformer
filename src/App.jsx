@@ -1,7 +1,7 @@
 import "./App.css";
 import Canvas from "./Components/Canvas";
 
-import Player from "./Components/Player";
+import PlayerComponent from "./Components/Player";
 
 function App() {
   const canvas = document.querySelector("canvas");
@@ -11,7 +11,7 @@ function App() {
   return (
     <>
       <Canvas c={c} canvas={canvas} />
-      <Player c={c} canvas={canvas} />
+      <PlayerComponent c={c} canvas={canvas} />
     </>
   );
 }
