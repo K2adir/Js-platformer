@@ -7,16 +7,7 @@ const Canvas = ({ c, canvas }) => {
   c.fillStyle = "red";
   c.fillRect(100, 100, 100, 100);
 
-  const animate = () => {
-    window.requestAnimationFrame(animate);
-    console.log("animate");
-  };
-
-  return (
-    <>
-      <button onClick={animate()}></button>
-    </>
-  );
+  return <></>;
 };
 
 export default Canvas;
