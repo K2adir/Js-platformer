@@ -27,6 +27,7 @@ const Player = ({ c, canvas }) => {
     }
 
     update() {
+      this.position.x += this.velocity.x;
       this.position.y += this.velocity.y;
       this.sides.bottom = this.position.y + this.height;
 
@@ -54,11 +55,22 @@ const Player = ({ c, canvas }) => {
     animate();
   }, [c, canvas]);
 
+  // KEY DOWN
   useEffect(() => {
     const handleKeyDown = (e) => {
       switch (e.key) {
         case "w":
-          if (player.velocity.y === 0) player.velocity.y = -10;
+          // this sets how height the player can jump
+          if (player.velocity.y === 0) player.velocity.y = -15;
+          break;
+        case "a":
+          //move left
+          player.velocity.x = -4;
+          break;
+
+        case "d":
+          //move right
+          player.velocity.x = 4;
           break;
         default:
           break;
@@ -67,6 +79,27 @@ const Player = ({ c, canvas }) => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyUp = (e) => {
+      switch (e.key) {
+        case "a":
+          //move left
+          player.velocity.x = 0;
+          break;
+
+        case "d":
+          //move right
+          player.velocity.x = 0;
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keyup", handleKeyUp);
+    return () => window.removeEventListener("keyup", handleKeyUp);
   }, []);
 
   return (
