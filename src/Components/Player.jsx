@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 
+// this file Contains Player class and Player Animation
+
 const Player = ({ c, canvas }) => {
   class Player {
     constructor() {
@@ -7,8 +9,15 @@ const Player = ({ c, canvas }) => {
         x: 50,
         y: 50,
       };
-      this.width = 50;
-      this.height = 50;
+
+      this.velocity = {
+        x: 0,
+        y: 0,
+      };
+      this.gravity = 1;
+
+      this.width = 25;
+      this.height = 25;
       this.sides = {
         bottom: this.position.y + this.height,
       };
@@ -20,10 +29,13 @@ const Player = ({ c, canvas }) => {
     }
 
     update() {
-      if (this.sides.bottom < canvas.height) {
-        this.position.y++;
+      this.position.y += this.velocity.y;
+
+      // canvas ground
+      if (this.sides.bottom + this.velocity.y < canvas.height) {
+        this.velocity.y += this.gravity;
         this.sides.bottom = this.position.y + this.height;
-      }
+      } else this.velocity.y = 0;
     }
   }
 

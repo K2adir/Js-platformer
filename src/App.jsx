@@ -1,5 +1,6 @@
 import "./App.css";
 import Canvas from "./Components/Canvas";
+
 import Player from "./Components/Player";
 
 function App() {
