@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 
-// this file Contains Player class and Player Animation
-
 const Player = ({ c, canvas }) => {
   class Player {
     constructor() {
@@ -30,11 +28,11 @@ const Player = ({ c, canvas }) => {
 
     update() {
       this.position.y += this.velocity.y;
+      this.sides.bottom = this.position.y + this.height;
 
       // canvas ground
       if (this.sides.bottom + this.velocity.y < canvas.height) {
         this.velocity.y += this.gravity;
-        this.sides.bottom = this.position.y + this.height;
       } else this.velocity.y = 0;
     }
   }
@@ -55,6 +53,21 @@ const Player = ({ c, canvas }) => {
 
     animate();
   }, [c, canvas]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      switch (e.key) {
+        case "w":
+          if (player.velocity.y === 0) player.velocity.y = -10;
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <>
