@@ -1,9 +1,27 @@
 import React, { useEffect, useRef } from "react";
-import Background from "./Background";
 import Controls from "./Controls";
 import background1 from "../assets/backgroundLevel1.png";
 
 const canvas = document.querySelector("canvas");
+const c = canvas.getContext("2d");
+
+class Background {
+  constructor({ canvas, position, imageSrc }) {
+    this.position = position;
+    this.imageSrc = imageSrc;
+    this.canvas = canvas;
+    this.image = new Image();
+    this.image.src = imageSrc;
+    this.image.onload = () => {
+      this.draw();
+    };
+  }
+  draw() {
+    const { width, height } = this.canvas;
+    c.drawImage(this.image, 0, 0, width, height);
+  }
+}
+
 const backgroundLevel1 = new Background({
   canvas,
   position: {
@@ -23,7 +41,7 @@ class Player {
       x: 0,
       y: 0,
     };
-    this.gravity = 0.5;
+    this.gravity = 1;
 
     this.width = 25;
     this.height = 25;
