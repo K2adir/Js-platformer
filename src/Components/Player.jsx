@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Background from "./Background";
 import Controls from "./Controls";
 import background1 from "../assets/backgroundLevel1.png";
+import { collisionBlocks } from "../MapWalls/WallsLevel1";
 
 const canvas = document.querySelector("canvas");
 const backgroundLevel1 = new Background({
@@ -71,7 +72,12 @@ const PlayerComponent = ({ c, canvas }) => {
     const animate = () => {
       window.requestAnimationFrame(animate);
       c.clearRect(0, 0, canvas.width, canvas.height);
+
       backgroundLevel1.draw();
+      collisionBlocks.forEach((collisionBlock) => {
+        collisionBlock.draw();
+      });
+
       // player movement speed = 2
       playerRef.current.velocity.x = 0;
 
