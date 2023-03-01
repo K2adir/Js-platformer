@@ -1,5 +1,28 @@
 import React, { useEffect, useRef } from "react";
 import Controls from "./Controls";
+import background1 from "../assets/backgroundLevel1.png";
+
+const canvas = document.querySelector("canvas");
+const c = canvas.getContext("2d");
+
+class Background {
+  constructor({ canvas }) {
+    this.canvas = canvas;
+    this.image = new Image();
+    this.image.src = background1;
+    this.image.onload = () => {
+      this.draw();
+    };
+  }
+  draw() {
+    const { width, height } = this.canvas;
+    c.drawImage(this.image, 0, 0, width, height);
+  }
+}
+
+const backgroundLevel1 = new Background({
+  canvas,
+});
 
 class Player {
   constructor() {
@@ -58,18 +81,15 @@ const PlayerComponent = ({ c, canvas }) => {
   useEffect(() => {
     const animate = () => {
       window.requestAnimationFrame(animate);
-
       c.clearRect(0, 0, canvas.width, canvas.height);
-      c.fillStyle = "white";
-      c.fillRect(0, 0, canvas.width, canvas.height);
-
-      // player movement speed = 4
+      backgroundLevel1.draw();
+      // player movement speed = 2
       playerRef.current.velocity.x = 0;
 
       if (keys.d.pressed) {
-        playerRef.current.velocity.x = 4;
+        playerRef.current.velocity.x = 1;
       } else if (keys.a.pressed) {
-        playerRef.current.velocity.x = -4;
+        playerRef.current.velocity.x = -1;
       }
 
       playerRef.current.draw(c);
@@ -81,7 +101,6 @@ const PlayerComponent = ({ c, canvas }) => {
 
   return (
     <>
-      <h1>Player</h1>
       <Controls keys={keys} player={playerRef.current} />
     </>
   );

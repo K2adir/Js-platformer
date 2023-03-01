@@ -6,8 +6,8 @@ import PlayerComponent from "./Components/Player";
 function App() {
   const canvas = document.querySelector("canvas");
   const c = canvas.getContext("2d");
-  canvas.style.width = "1024px";
-  canvas.style.height = "576px";
+  canvas.style.width = "1050px";
+  canvas.style.height = "550px";
   return (
     <>
       <Canvas c={c} canvas={canvas} />
